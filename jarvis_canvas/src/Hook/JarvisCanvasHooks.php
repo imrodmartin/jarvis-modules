@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\jarvis_canvas\Hook;
 
 use Drupal\Core\Entity\Display\EntityDisplayInterface;
+use Drupal\Core\Extension\ThemeSettingsProvider;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Hook\Attribute\Hook;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -68,7 +69,7 @@ final class JarvisCanvasHooks {
   public function pageAttachments(array &$attachments): void {
     $declarations = [];
     foreach (self::FONT_SIZES as $key => [$default, $unit]) {
-      $value = theme_get_setting('jarvis_fs_' . $key, 'jarvis');
+      $value = \Drupal::service(ThemeSettingsProvider::class)->getSetting('jarvis_fs_' . $key, 'jarvis');
       $value = is_numeric($value) ? (float) $value : $default;
       // Base is absolute; the rest become em so they scale from it.
       $declarations[] = $unit === 'px'
@@ -118,10 +119,11 @@ final class JarvisCanvasHooks {
     // already know, and you cannot add a new one from the prop. Swapping in
     // media_library_widget restores browse-and-add.
     //
-    // Bundles are resolved from the site instead of hardcoding the recipe's
-    // `jarvis_video`, so a site using core's `remote_video` works too. If no
-    // oEmbed video type exists, leave Canvas's default in place rather than
-    // handing the widget an empty bundle list.
+    // Bundles are resolved from the site rather than hardcoded, so this works
+    // whichever oEmbed video type a site has -- the recipe ships core's
+    // `remote_video`, but a site that renamed it, or carries more than one, is
+    // covered too. If no oEmbed video type exists, leave Canvas's default in
+    // place rather than handing the widget an empty bundle list.
     if (!empty($schema['x-jarvis-remote-video'])) {
       $branches = [];
       foreach (\Drupal::entityTypeManager()->getStorage('media_type')->loadMultiple() as $id => $media_type) {
