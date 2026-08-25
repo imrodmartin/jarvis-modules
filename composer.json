@@ -1,6 +1,6 @@
 {
     "name": "imrodmartin/jarvis-modules",
-    "description": "Custom glue modules for the Jarvis Drupal theme: jarvis_blocks (block content types mapped to SDCs) and jarvis_canvas (Canvas integration: text formats on props, template CTA, component folder organiser).",
+    "description": "Canvas glue module for the Jarvis Drupal theme: text formats on rich-text props, the Remote video media picker, template CTA, component folder organiser, and the jarvis_image_style / jarvis_overlay_alpha Twig filters the theme templates require.",
     "type": "drupal-custom-module",
     "license": "GPL-2.0-or-later",
     "homepage": "https://github.com/imrodmartin/jarvis-bootstrap-recipe",
