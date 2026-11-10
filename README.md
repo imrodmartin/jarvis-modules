@@ -18,7 +18,7 @@ discovery finds the nested module:
 **This is required, not optional.** A theme cannot register a Twig extension,
 so `hero`, `card`, the column shell and `image` all depend on filters that live
 here; Twig fails to compile them when the module is absent. `drupal/jarvis`
-requires `^2.1` of this package and declares the module in `jarvis.info.yml`.
+requires `^2.2` of this package (theme 4.0 and later; 2.2 carries the conversion of content saved under 3.x) and declares the module in `jarvis.info.yml`.
 It also arrives with
 [imrodmartin/jarvis-recipe](https://github.com/imrodmartin/jarvis-recipe),
 which sets up the whole site.
