@@ -19,8 +19,9 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * Works on the finished HTML rather than on stored component trees, so one
  * rule covers Canvas pages, content templates, Layout Builder nodes and Views
- * alike. The hero sits at the top of <main>, so "hero banner, else first body
- * image" is simply the first usable image inside <main>, background or <img>.
+ * alike. The hero sits at the top of the page body (the hero region or the top
+ * of <main>), so "hero banner, else first body image" is simply the first
+ * usable image below the site header, background or <img>.
  *
  * An og:image already in the head (an author's own Metatag value) is kept.
  *
@@ -73,19 +74,31 @@ final class ShareImageSubscriber implements EventSubscriberInterface {
   }
 
   /**
-   * First usable image inside <main>, in document order.
+   * First usable image in the page body, in document order.
+   *
+   * The window opens at the first full-width region page.html.twig prints
+   * under the site header (page title, hero, highlighted) or at <main>,
+   * whichever comes first: a banner placed in the hero region sits outside
+   * <main>. It closes at </main>, so the footer never counts.
    */
   private function pageImage(string $html, int $head_end): ?string {
-    $start = stripos($html, '<main', $head_end);
-    $end = $start === FALSE ? FALSE : stripos($html, '</main>', $start);
+    $main = stripos($html, '<main', $head_end);
+    $end = $main === FALSE ? FALSE : stripos($html, '</main>', $main);
     // Without <main>, the header logo would win; better no page image.
-    if ($start === FALSE || $end === FALSE) {
+    if ($main === FALSE || $end === FALSE) {
       return NULL;
     }
-    $main = substr($html, $start, $end - $start);
+    $start = $main;
+    foreach (['jarvis-page-title', 'jarvis-region--full jarvis-hero', 'jarvis-highlighted'] as $region) {
+      $at = strpos($html, $region, $head_end);
+      if ($at !== FALSE && $at < $start) {
+        $start = $at;
+      }
+    }
+    $body = substr($html, $start, $end - $start);
     preg_match_all(
       '/background-image:\s*url\(\s*[\'"]?([^\'")]+)|<img\b[^>]*>/i',
-      $main,
+      $body,
       $matches,
       PREG_SET_ORDER,
     );
