@@ -1,0 +1,20 @@
+/* Site alert bars, printed in page_top above the header by AlertHooks.
+   Every pair clears WCAG AA (4.5:1); scripts/check-alerts.php reads the
+   hex values below and fails if one drops under. */
+.jarvis-alert {
+  padding: 14px 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.jarvis-alert p:last-child {
+  margin-bottom: 0;
+}
+.jarvis-alert a {
+  color: inherit;
+  text-decoration: underline;
+}
+.jarvis-alert--red { background: #b02a37; color: #fff; }
+.jarvis-alert--yellow { background: #ffc107; color: #000; }
+.jarvis-alert--green { background: #146c43; color: #fff; }
+.jarvis-alert--blue { background: #0a58ca; color: #fff; }

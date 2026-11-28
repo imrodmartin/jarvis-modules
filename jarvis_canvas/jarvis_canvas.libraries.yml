@@ -9,3 +9,10 @@ canvas.transform.jarvisTextItem:
   dependencies:
     - core/drupal
     - canvas/canvas-ui
+
+# Site alert bars (AlertHooks::pageTop). In the module, not the theme, so a
+# jarvis-modules release reaches every site without a theme upgrade.
+alerts:
+  css:
+    theme:
+      css/alerts.css: {}
