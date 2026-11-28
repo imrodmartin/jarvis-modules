@@ -14,3 +14,12 @@ services:
       - '@jarvis_canvas.overlay_alpha'
     tags:
       - { name: twig.extension }
+
+  # Share image (og:image / twitter:image): hero banner, else first body
+  # image, else the site logo. Every Jarvis site, by rule.
+  jarvis_canvas.share_image_subscriber:
+    class: Drupal\jarvis_canvas\ShareImageSubscriber
+    arguments:
+      - '@router.admin_context'
+    tags:
+      - { name: event_subscriber }
